@@ -15,7 +15,6 @@ include_once '../objects/user.php';
 $database = new Database();
 $db = $database->getConnection();
 
-// initialize object
 $user = new User($db);
 
 $data = json_decode(file_get_contents("php://input", true));
@@ -28,7 +27,6 @@ if(!empty($data->username) && !empty($data->password) ){
     $stmt = $user->readOne();
     $num = $stmt->rowCount();
 
-    // check if more than 0 record found
     if($num>0){
         
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -42,18 +40,10 @@ if(!empty($data->username) && !empty($data->password) ){
             
         echo json_encode(array('message' => "Sucessfully login.", 'token' => $jwt));
     }else{
-        
-        // set response code - 400 bad request
         http_response_code(400);
-        
-        // tell the user
         echo json_encode(array("message" => "Unable to login. Invalid user."));
     }
 }else{
-    
-    // set response code - 400 bad request
     http_response_code(400);
-    
-    // tell the user
     echo json_encode(array("message" => "Unable to login. Data is incomplete."));
 }
