@@ -40,7 +40,6 @@ if($jwt) {
     $decoded = JWT::decode($jwt, 'secret', array('HS256'));
     
     if ($decoded->role == 'seller'){
-        // set ID property of product to be edited
         $product->id = $data->id;
         
         $product->readOne();
