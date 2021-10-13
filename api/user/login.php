@@ -8,9 +8,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require "../../vendor/autoload.php";
 use \Firebase\JWT\JWT;
 
-include_once '../config/database.php';
 include_once '../config/conf.php';
-
 include_once '../objects/user.php';
 
 $database = new Database();

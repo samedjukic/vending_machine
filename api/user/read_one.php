@@ -5,7 +5,7 @@ header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Credentials: true");
 header('Content-Type: application/json');
 
-include_once '../config/database.php';
+include_once '../config/conf.php';
 include_once '../objects/user.php';
 
 $database = new Database();
