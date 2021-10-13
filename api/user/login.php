@@ -9,6 +9,7 @@ require "../../vendor/autoload.php";
 use \Firebase\JWT\JWT;
 
 include_once '../config/database.php';
+include_once '../config/conf.php';
 
 include_once '../objects/user.php';
 
@@ -36,7 +37,7 @@ if(!empty($data->username) && !empty($data->password) ){
             
         $payload = array('user_id'=>$user_id, 'role'=>$role, 'exp'=>(time() + 3600));
         
-        $jwt = JWT::encode($payload, 'secret');
+        $jwt = JWT::encode($payload, JWT_SECRET_KEY);
             
         echo json_encode(array('message' => "Sucessfully login.", 'token' => $jwt));
     }else{

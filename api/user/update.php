@@ -9,6 +9,7 @@ require "../../vendor/autoload.php";
 use \Firebase\JWT\JWT;
 
 include_once '../config/database.php';
+include_once '../config/conf.php';
 include_once '../objects/user.php';
 
 $database = new Database();
@@ -32,7 +33,7 @@ $data = json_decode(file_get_contents("php://input"));
 
 if($jwt) {
     
-    $decoded = JWT::decode($jwt, 'secret', array('HS256'));
+    $decoded = JWT::decode($jwt, JWT_SECRET_KEY, array('HS256'));
     $user->id = $decoded->user_id;
         
     $user->username = $data->username;
