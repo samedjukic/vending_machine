@@ -9,12 +9,12 @@ require "../../vendor/autoload.php";
 use \Firebase\JWT\JWT;
 
 include_once '../config/database.php';
-include_once '../objects/product.php';
+include_once '../objects/user.php';
 
 $database = new Database();
 $db = $database->getConnection();
 
-$product = new Product($db);
+$user = new User($db);
 
 $authHeader = $_SERVER['HTTP_AUTHORIZATION'];
 
@@ -32,33 +32,30 @@ $data = json_decode(file_get_contents("php://input"));
 
 if($jwt) {
     
-    $decoded = JWT::decode($jwt, 'secret', array('HS256'));
+    $decoded = JWT::decode($jwt, JWT_SECRET_KEY, array('HS256'));
     
-    if ($decoded->role == 'seller'){
-        $product->id = $data->id;
-        
-        $product->readOne();
-        
-        if ($product->sellerId == $decoded->user_id){
-            $product->productName = $data->productName;
-            $product->cost = $data->cost;
-            $product->amountAvailable = $data->amountAvailable;
-            $product->sellerId = $decoded->user_id;
+    if ($decoded->role == 'buyer'){
+        if (in_array($data->deposit, ACCEPTED_COINS)){
+            $user->id = $decoded->user_id;
             
-            if($product->update()){
+            $user->readOneById();
+            
+            $user->deposit += $data->deposit;
+            
+            if($user->update()){
                 http_response_code(200);
-                echo json_encode(array("message" => "Product was updated."));
+                echo json_encode(array("message" => "User deposit was updated."));
             }else{
                 http_response_code(503);
-                echo json_encode(array("message" => "Unable to update product."));
+                echo json_encode(array("message" => "Unable to update user deposit."));
             }
-        }else {
+        }else{
             http_response_code(400);
-            echo json_encode(array("message" => "Unable to update product. You are not the owner of this product."));
+            echo json_encode(array("message" => "Unable to update user deposit. We dont accept that coin amount."));
         }
     }else{
         http_response_code(400);
-        echo json_encode(array("message" => "Unable to update product. You dont have seller role."));
+        echo json_encode(array("message" => "Unable to update user deposit. You dont have buyer role."));
     }
 }else{
     http_response_code(400);

@@ -40,25 +40,20 @@ if($jwt) {
         $product->readOne();
         
         if ($product->sellerId == $decoded->user_id){
-            $product->productName = $data->productName;
-            $product->cost = $data->cost;
-            $product->amountAvailable = $data->amountAvailable;
-            $product->sellerId = $decoded->user_id;
-            
-            if($product->update()){
+            if($product->delete()){
                 http_response_code(200);
-                echo json_encode(array("message" => "Product was updated."));
+                echo json_encode(array("message" => "Product was deleted."));
             }else{
                 http_response_code(503);
-                echo json_encode(array("message" => "Unable to update product."));
+                echo json_encode(array("message" => "Unable to delete product."));
             }
         }else {
             http_response_code(400);
-            echo json_encode(array("message" => "Unable to update product. You are not the owner of this product."));
+            echo json_encode(array("message" => "Unable to delete product. You are not the owner of this product."));
         }
     }else{
         http_response_code(400);
-        echo json_encode(array("message" => "Unable to update product. You dont have seller role."));
+        echo json_encode(array("message" => "Unable to delete product. You dont have seller role."));
     }
 }else{
     http_response_code(400);

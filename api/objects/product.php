@@ -83,10 +83,10 @@ class Product{
         
         $stmt = $this->conn->prepare($query);
         
-        $this->name=htmlspecialchars(strip_tags($this->productName));
-        $this->price=htmlspecialchars(strip_tags($this->cost));
-        $this->description=htmlspecialchars(strip_tags($this->amountAvailable));
-        $this->category_id=htmlspecialchars(strip_tags($this->sellerId));
+        $this->productName=htmlspecialchars(strip_tags($this->productName));
+        $this->cost=htmlspecialchars(strip_tags($this->cost));
+        $this->amountAvailable=htmlspecialchars(strip_tags($this->amountAvailable));
+        $this->sellerId=htmlspecialchars(strip_tags($this->sellerId));
         $this->id=htmlspecialchars(strip_tags($this->id));
         
         $stmt->bindParam(':productName', $this->productName);
@@ -99,6 +99,20 @@ class Product{
             return true;
         }
         
+        return false;
+    }
+    
+    function delete(){
+        $query = "DELETE FROM " . $this->table_name . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        
+        $this->id=htmlspecialchars(strip_tags($this->id));
+        
+        $stmt->bindParam(1, $this->id);
+        
+        if($stmt->execute()){
+            return true;
+        }
         return false;
     }
     
