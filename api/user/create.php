@@ -15,11 +15,11 @@ $user = new User($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if(!empty($data->username) && !empty($data->password) && !empty($data->deposit) && !empty($data->role)){
+if(!empty($data->username) && !empty($data->password) && !empty($data->role)){
         
         $user->username = $data->username;
         $user->password = md5($data->password);
-        $user->deposit = $data->deposit;
+        $user->deposit = 0;
         $user->role = $data->role;
         
         if($user->create()){

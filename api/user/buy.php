@@ -52,7 +52,7 @@ if($jwt) {
                 
                 $deposit_amount = $user->deposit;
                 
-                //$user->deposit = 0;
+                $user->deposit = 0;
                 
                 $product->update();
                 $user->update();
